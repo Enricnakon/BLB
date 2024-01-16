@@ -1,14 +1,33 @@
-//Remember to import in mongoose
+const mongoose = require('mongoose');
+ 
 
+const citizensSchema = new mongoose.Schema({
+  name: String,
+  dob: Date,
+  father: String,
+  mother: String,
+  gender: String,
+  blood_group: String,
+});
 
-//create the citizen schema here with the appropriate data types
+const CitizensModel = mongoose.model('Citizens', citizensSchema);
 
-
-//create the title schema here wit the right fields
-
-
-//convert the schemas into models from here
-
-
-//export the models as modules from here.
-
+const landTitlesSchema = new mongoose.Schema({
+    ownerName: String,
+    location: String,
+    size: String,
+    coordinates: String,
+    titleNumber: {
+      type: String,
+      unique: false, // Set to false to remove uniqueness constraint
+    },
+    satellitePhoto: {
+      data: Buffer,
+      contentType: String,
+    },
+  });
+  
+  const LandTitlesModel = mongoose.model('LandTitles', landTitlesSchema);
+  
+  module.exports = { CitizensModel, LandTitlesModel };
+  

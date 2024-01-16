@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Form</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+
+  <br><br></br>
+
+
+  <h1 class="text-center"> BLB TITLES AND CITIZENSHIP MGT SYSTEM</h1>
+
+  
+  
+  <div class="form-container">
+    <h1>REGISTRATION FORMS</h1>
+    <form action="/submitCitizen" method="post">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required><br>
+
+      <label for="dob">Date of Birth:</label>
+      <input type="date" id="dob" name="dob" required><br>
+
+      <label for="father">Father:</label>
+      <input type="text" id="father" name="father" required><br>
+
+      <label for="mother">Mother:</label>
+      <input type="text" id="mother" name="mother" required><br>
+
+      <label for="gender">Gender:</label>
+      <select id="gender" name="gender" required>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select><br>
+
+      <label for="blood_group">Blood Group:</label>
+      <input type="text" id="blood_group" name="blood_group" required><br>
+
+      <button type="submit">Submit Citizen Information</button>
+    </form>
+  </div>    
+
+  <h1>Citizens Viewer</h1>
+
+  <!-- Add a button to trigger the data fetching -->
+  <button id="viewCitizensButton">View Citizens</button>
+
+  <div id="citizensContainer"></div>
+
+  <script>
+    // Function to fetch and display citizens data
+    function viewCitizens() {
+      // Fetch data from the server
+      fetch('/viewCitizens')
+        .then(response => response.json())
+        .then(data => {
+          // Process the data and create HTML elements
+          const citizensContainer = document.getElementById('citizensContainer');
+
+          data.forEach(entry => {
+            const citizenElement = document.createElement('div');
+            citizenElement.innerHTML = `
+              <h3>Name: ${entry.name}</h3>
+              <p>Date of Birth: ${entry.dob}</p>
+              <p>Father: ${entry.father}</p>
+              <p>Mother: ${entry.mother}</p>
+              <p>Gender: ${entry.gender}</p>
+              <p>Blood Group: ${entry.blood_group}</p>
+              <hr>
+            `;
+
+            citizensContainer.appendChild(citizenElement);
+          });
+        })
+        .catch(error => console.error('Error fetching citizens:', error));
+    }
+
+    // Add an event listener to the button
+    const viewCitizensButton = document.getElementById('viewCitizensButton');
+    viewCitizensButton.addEventListener('click', viewCitizens);
+  </script>
+  
+
+
+  <br><br></br>
+  <div class="form-container">
+    <h1>REGISTERED TITLES</h1>
+    <form action="/submitLandTitle" method="post" enctype="multipart/form-data">
+      <label for="ownerName">Owner Name:</label>
+      <input type="text" id="ownerName" name="ownerName" required><br>
+
+      <label for="location">Location:</label>
+      <input type="text" id="location" name="location" required><br>
+
+      <label for="size">Size:</label>
+      <input type="text" id="size" name="size" required><br>
+
+      <label for="coordinates">Coordinates:</label>
+      <input type="text" id="coordinates" name="coordinates" required><br>
+
+      <label for="titleNumber">Title Number:</label>
+      <input type="text" id="titleNumber" name="titleNumber" required><br>
+
+      <label for="satellitePhoto">Satellite Photo:</label>
+      <input type="file" id="satellitePhoto" name="satellitePhoto" accept="image/*" required><br>
+
+      <button type="submit">Submit Land Title Information</button>
+    </form>
+  </div>
+  <h1>Land Titles Viewer</h1>
+
+  <!-- Button to toggle visibility of land titles -->
+  <button id="toggleLandTitles" class="toggleButton"> view Land Titles </button>
+
+  <!-- Container for land titles -->
+  <div id="landTitlesContainer" style="display: none;"></div>
+
+  <!-- Button to hide land titles after viewing -->
+  <button id="hideLandTitles" class="toggleButton" style="display: none;">Hide Land Titles</button>
+
+  <script>
+    // Function to fetch and display land titles data
+    function viewLandTitles() {
+      // Fetch data from the server
+      fetch('/viewLandTitles')
+        .then(response => response.json())
+        .then(data => {
+          // Process the data and create HTML elements
+          const landTitlesContainer = document.getElementById('landTitlesContainer');
+
+          data.forEach(entry => {
+            const landTitleElement = document.createElement('div');
+            landTitleElement.innerHTML = `
+              <h3>Title Number: ${entry.titleNumber}</h3>
+              <p>Owner: ${entry.ownerName}</p>
+              <p>Location: ${entry.location}</p>
+              <p>Size: ${entry.size}</p>
+              <p>Coordinates: ${entry.coordinates}</p>
+              <p>Image Name: ${entry.imageName}</p>
+              <img src="/images/${entry.imageName}" alt="Land Title Image" style="max-width: 100%;">
+              <hr>
+            `;
+
+            landTitlesContainer.appendChild(landTitleElement);
+          });
+
+          // Show the land titles container and hide the view button
+          landTitlesContainer.style.display = 'block';
+          document.getElementById('toggleLandTitles').style.display = 'none';
+          document.getElementById('hideLandTitles').style.display = 'block';
+        })
+        .catch(error => console.error('Error fetching land titles:', error));
+    }
+
+    // Function to hide land titles container and show the toggle button
+    function hideLandTitles() {
+      document.getElementById('landTitlesContainer').style.display = 'none';
+      document.getElementById('toggleLandTitles').style.display = 'block';
+      document.getElementById('hideLandTitles').style.display = 'none';
+    }
+
+    // Add event listeners to buttons
+    const toggleLandTitlesButton = document.getElementById('toggleLandTitles');
+    const hideLandTitlesButton = document.getElementById('hideLandTitles');
+
+    toggleLandTitlesButton.addEventListener('click', viewLandTitles);
+    hideLandTitlesButton.addEventListener('click', hideLandTitles);
+  </script>
+
+
+<div class="form-container">
+  <h1>Land Title Transfer</h1>
+  <form action="/transferLandTitle" method="post">
+    <!-- Add input fields for sourceTitleNumber and destinationTitleNumber -->
+    <label for="sourceTitleNumber">Source Title Number:</label>
+    <input type="text" id="sourceTitleNumber" name="sourceTitleNumber" required><br>
+
+    <label for="destinationTitleNumber">Destination Title Number:</label>
+    <input type="text" id="destinationTitleNumber" name="destinationTitleNumber" required><br>
+
+    <button type="submit">Transfer Ownership</button>
+  </form>
+</div>
+
+
+
+ 
+
+  <div id="searchResultContainer" style="display: none;"></div>
+
+  <div class="form-container">
+    <h1>Search Land Title</h1>
+    <form id="searchForm" onsubmit="event.preventDefault(); searchLandTitle();">
+      <label for="searchTitleNumber">Search by Title Number:</label>
+      <input type="text" id="searchTitleNumber" name="titleNumber" required><br>
+      <button type="submit">Search Land Title</button>
+    </form>
+  </div>
+  
+  <!-- Button to toggle visibility of search form and results -->
+  <button id="toggleSearch" class="toggleButton">hide or Search</button>
+  
+  <script>
+    // Function to perform the search and update the result dynamically
+    function searchLandTitle() {
+      const titleNumber = document.getElementById('searchTitleNumber').value;
+      const searchResultContainer = document.getElementById('searchResultContainer');
+  
+      // Fetch data from the server
+      fetch(`/searchLandTitle?titleNumber=${titleNumber}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data) {
+            // Display all attributes if Land Title is found
+            searchResultContainer.innerHTML = `
+              <h3>Land Title found!</h3>
+              <p>Owner Name: ${data.ownerName}</p>
+              <p>Location: ${data.location}</p>
+              <p>Size: ${data.size}</p>
+              <p>Coordinates: ${data.coordinates}</p>
+              <p>Title Number: ${data.titleNumber}</p>
+              <p>Satellite Photo: ${data.satellitePhoto}</p>
+              <img src="/images/${data.titleNumber}.jpg" alt="Land Title Image" style="max-width: 100%;">
+            `;
+  
+            // Show the search result container
+            searchResultContainer.style.display = 'block';
+  
+            // Optionally, hide the search form after displaying the search results
+            document.getElementById('searchForm').style.display = 'none';
+          } else {
+            // Display a message if not found
+            searchResultContainer.innerHTML = '<p>Land Title not found.</p>';
+            
+            // Hide the search result container
+            searchResultContainer.style.display = 'none';
+          }
+        })
+        .catch(error => console.error('Error searching for Land Title:', error));
+    }
+  
+    // Function to toggle visibility of search form and results
+    function toggleSearch() {
+      const searchForm = document.getElementById('searchForm');
+      const searchResultContainer = document.getElementById('searchResultContainer');
+  
+      if (searchForm.style.display === 'none') {
+        // Show the search form and hide the results
+        searchForm.style.display = 'block';
+        searchResultContainer.style.display = 'none';
+      } else {
+        // Hide the search form and show the results
+        searchForm.style.display = 'none';
+        searchResultContainer.style.display = 'block';
+      }
+    }
+  
+    // Add event listener to the toggle search button
+    const toggleSearchButton = document.getElementById('toggleSearch');
+    toggleSearchButton.addEventListener('click', toggleSearch );
+  </script>
+  
+</body>
+
+</html>
